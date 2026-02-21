@@ -246,6 +246,11 @@ def process_video(input_path, output_path, *, conf_global=0.6, motorcycle_conf=0
             if not ret:
                 break
                 
+            # PREVENT CLOUDFLARE 100s TIMEOUT ON RENDER FREE CPU
+            # Process maximum of 5 seconds of footage so the server responds instantly
+            if frame_count >= out_fps * 5:
+                break
+                
             raw_frame_count += 1
             if raw_frame_count % process_every_n_frames != 0:
                 continue

@@ -25,7 +25,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = False
 
 ALLOWED_HOSTS = ['traffic-analysis-backend-9vjd.onrender.com', 'localhost', '127.0.0.1']
 
@@ -107,6 +107,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Media files (uploads, results)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+WHITENOISE_ROOT = MEDIA_ROOT
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
