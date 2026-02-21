@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
     DEBUG=(bool, False),
     ALLOWED_HOSTS=(list, ['localhost', '127.0.0.1']),
-    CORS_ALLOWED_ORIGINS=(list, ['http://localhost:5173']),
+    CORS_ALLOWED_ORIGINS=(list, ['http://localhost:5173','https://traffic-analysis-frontend-sandy.vercel.app']),
     MAX_FILE_SIZE=(int, 209715200),
     YOLO_MODEL_PATH=(str, str(BASE_DIR.parent / 'yolov8n.pt')),
 )
