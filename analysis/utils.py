@@ -194,8 +194,8 @@ def process_video(input_path, output_path, *, conf_global=0.6, motorcycle_conf=0
             
         frame_area = width * height
 
-        # 2. Reduce the output framerate to ~15 FPS to cut processing/encoding time in half or more
-        TARGET_FPS = 15.0
+        # 2. Reduce the output framerate to ~10 FPS to cut processing/encoding time in half or more
+        TARGET_FPS = 10.0
         process_every_n_frames = max(1, int(round(orig_fps / TARGET_FPS)))
         out_fps = int(orig_fps / process_every_n_frames)
 
@@ -247,8 +247,8 @@ def process_video(input_path, output_path, *, conf_global=0.6, motorcycle_conf=0
                 break
                 
             # PREVENT CLOUDFLARE 100s TIMEOUT ON RENDER FREE CPU
-            # Process maximum of 5 seconds of footage so the server responds instantly
-            if frame_count >= out_fps * 5:
+            # Process maximum of 4 seconds of footage so the server responds instantly
+            if frame_count >= out_fps * 4:
                 break
                 
             raw_frame_count += 1
