@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
     DEBUG=(bool, False),
     ALLOWED_HOSTS=(list, ['traffic-analysis-backend-9vjd.onrender.com', 'localhost', '127.0.0.1']),
-    CORS_ALLOWED_ORIGINS=(list, ['http://localhost:5173','https://traffic-analysis-frontend-sandy.vercel.app']),
+    CORS_ALLOWED_ORIGINS=(list, ['http://localhost:5173', 'https://traffic-analysis-frontend-sandy.vercel.app']),
     MAX_FILE_SIZE=(int, 209715200),
     YOLO_MODEL_PATH=(str, str(BASE_DIR.parent / 'yolov8n.pt')),
     SECRET_KEY=(str, 'django-insecure-render-default-key-123456789'),
@@ -112,7 +112,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS configuration
-CORS_ALLOWED_ORIGINS = env('CORS_ALLOWED_ORIGINS')
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    'https://traffic-analysis-frontend-sandy.vercel.app'
+]
+
+if isinstance(env('CORS_ALLOWED_ORIGINS'), list):
+    CORS_ALLOWED_ORIGINS.extend(env('CORS_ALLOWED_ORIGINS'))
+
 CORS_ALLOW_CREDENTIALS = True
 
 # Django REST Framework
