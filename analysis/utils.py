@@ -246,11 +246,7 @@ def process_video(input_path, output_path, *, conf_global=0.6, motorcycle_conf=0
             if not ret:
                 break
                 
-            # PREVENT CLOUDFLARE 100s TIMEOUT ON RENDER FREE CPU
-            # Process maximum of 4 seconds of footage so the server responds instantly
-            if frame_count >= out_fps * 4:
-                break
-                
+            # Full video processing enabled (Removed 4-second hardcap)
             raw_frame_count += 1
             if raw_frame_count % process_every_n_frames != 0:
                 continue
@@ -401,47 +397,6 @@ def process_video(input_path, output_path, *, conf_global=0.6, motorcycle_conf=0
                     'lane_densities': current_lane_densities,
                     'density': float(density_pct)
                 })
-
-            # Draw UI Panel
-            for i, (dir_name, stats) in enumerate(lane_stats.items()):
-                # Compact height to fit 4 blocks
-                y_base = 20 + i * 85
-                density_val = min(100, (stats['total'] / MAX_VEHICLES_PER_DIR) * 100)
-                
-                # Panel background
-                cv2.rectangle(frame, (10, y_base - 15), (200, y_base + 65), (0, 0, 0), -1)
-                cv2.rectangle(frame, (10, y_base - 15), (200, y_base + 65), (255, 255, 255), 1)
-                
-                # Direction Name
-                cv2.putText(frame, dir_name, (15, y_base),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-                
-                # Render only total counts instead of loop to save space
-                cars = stats.get('car', 0)
-                trucks = stats.get('truck', 0)
-                motorcycles = stats.get('motorcycle', 0)
-                buses = stats.get('bus', 0)
-                
-                cv2.putText(frame, f"C:{cars} T:{trucks} M:{motorcycles} B:{buses}", (15, y_base + 20),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.4, (200, 200, 200), 1)
-
-                
-                bar_width = 160
-                filled_width = int((bar_width * density_val) / 100)
-                cv2.rectangle(frame, (15, y_base + 45), (15 + bar_width, y_base + 55), (100, 100, 100), 1)
-                if density_val > 0:
-                    if density_val > 75:
-                        color = (0, 0, 255)
-                    elif density_val > 50:
-                        color = (0, 165, 255)
-                    else:
-                        color = (0, 255, 0)
-                    cv2.rectangle(frame, (15, y_base + 45), (15 + filled_width, y_base + 55), color, -1)
-                cv2.putText(frame, f"{density_val:.1f}%", (15, y_base + 40),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
-
-            cv2.putText(frame, f'Frame: {frame_count}', (10, height - 20),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 
             out.write(frame)
             frame_count += 1
