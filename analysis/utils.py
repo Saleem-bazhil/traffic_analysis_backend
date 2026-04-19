@@ -68,21 +68,8 @@ def get_direction(x, y, width, height):
 
 
 def draw_direction_guides(frame, width, height):
-    """Draw intersection guide lines and direction labels on the frame."""
-    cv2.line(frame, (0, 0), (width, height), (255, 255, 255), 2)
-    cv2.line(frame, (0, height), (width, 0), (255, 255, 255), 2)
-
-    overlays = {
-        'North': (width // 2 - 55, 40),
-        'South': (width // 2 - 55, height - 30),
-        'East': (width - 110, height // 2),
-        'West': (20, height // 2),
-    }
-
-    for label, origin in overlays.items():
-        x, y = origin
-        cv2.putText(frame, label, (x + 2, y + 2), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 0), 4, cv2.LINE_AA)
-        cv2.putText(frame, label, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2, cv2.LINE_AA)
+    """Keep processed media clean by omitting guide lines and direction labels."""
+    return
 
 
 def process_image(file_path, output_path):
