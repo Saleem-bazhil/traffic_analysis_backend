@@ -67,6 +67,24 @@ def get_direction(x, y, width, height):
         return 'West'
 
 
+def draw_direction_guides(frame, width, height):
+    """Draw intersection guide lines and direction labels on the frame."""
+    cv2.line(frame, (0, 0), (width, height), (255, 255, 255), 2)
+    cv2.line(frame, (0, height), (width, 0), (255, 255, 255), 2)
+
+    overlays = {
+        'North': (width // 2 - 55, 40),
+        'South': (width // 2 - 55, height - 30),
+        'East': (width - 110, height // 2),
+        'West': (20, height // 2),
+    }
+
+    for label, origin in overlays.items():
+        x, y = origin
+        cv2.putText(frame, label, (x + 2, y + 2), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 0), 4, cv2.LINE_AA)
+        cv2.putText(frame, label, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2, cv2.LINE_AA)
+
+
 def process_image(file_path, output_path):
     """
     Process a traffic image for vehicle detection into 4 directions.
@@ -91,9 +109,7 @@ def process_image(file_path, output_path):
 
     height, width = image.shape[:2]
 
-    # Draw diagonals
-    cv2.line(image, (0, 0), (width, height), (255, 255, 255), 2)
-    cv2.line(image, (0, height), (width, 0), (255, 255, 255), 2)
+    draw_direction_guides(image, width, height)
 
     # Simulated vehicle detection
     num_vehicles = random.randint(8, 20)
@@ -259,9 +275,7 @@ def process_video(input_path, output_path, *, conf_global=0.6, motorcycle_conf=0
                 lane_stats[direction].clear()
                 lane_stats[direction]['total'] = 0
 
-            # Draw diagonals (use scaled width/height)
-            cv2.line(frame, (0, 0), (width, height), (255, 255, 255), 2)
-            cv2.line(frame, (0, height), (width, 0), (255, 255, 255), 2)
+            draw_direction_guides(frame, width, height)
 
             # Frame Skipping for Inference (Every Nth frame)
             FRAME_SKIP = 3 # With out_fps ~15, inference runs ~5 times per sec
